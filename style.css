@@ -1,0 +1,74 @@
+html {
+    scroll-behavior: smooth;
+}
+
+header {
+    height: 50px;
+    width: 100%;
+}
+
+.home {
+    text-align: left;
+    position: relative;
+}
+
+.home-text {
+    position: absolute;
+    top: 40%;
+    left: 30%;
+    transform: translate(-30%, -30%);
+    -webkit-transform: translate(-30%, -30%);
+    -moz-transform: translate(-30%, -30%);
+    -ms-transform: translate(-30%, -30%);
+    -o-transform: translate(-30%, -30%);
+}
+
+.home-text h1 {
+    color: white;
+}
+
+.home-text p {
+    color: aliceblue;
+    font-size: 18pt;
+}
+
+.home-text img {
+    width: 20%;
+}
+
+#about {
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+#experience {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#hardskill {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#softskill {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#award {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#education {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.footer {
+    width: 100%;
+    padding: 0px;
+    margin-top: 100px;
+    background: rgb(43, 48, 53);
+}
