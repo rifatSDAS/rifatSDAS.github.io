@@ -558,6 +558,226 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ===============================================
+    Projects Showcase (About Section)
+   =============================================== */
+.projects-showcase {
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.projects-header {
+    margin-bottom: 2.5rem;
+}
+
+.projects-header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+}
+
+.investment-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-accent);
+    background: var(--color-accent-glow);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    border: 1px solid rgba(0, 212, 170, 0.3);
+    letter-spacing: 0.02em;
+}
+
+.investment-badge i {
+    font-size: 0.7rem;
+}
+
+.project-category {
+    margin-bottom: 2rem;
+}
+
+.project-category-opensource {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.project-category-opensource .project-category-title {
+    font-size: 1rem;
+    color: var(--color-text);
+}
+
+.project-category-title {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 600;
+}
+
+.project-category-title i {
+    color: var(--color-accent);
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
+}
+
+.project-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease, background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.project-card.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.project-card:hover {
+    background: var(--color-card-hover);
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+}
+
+.project-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.project-card-header i {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: var(--color-text-subtle);
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.project-card:hover .project-card-header i {
+    color: var(--color-accent);
+}
+
+.project-name {
+    font-weight: 600;
+    color: var(--color-text);
+    font-size: 1rem;
+}
+
+.project-badge {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-accent);
+    background: var(--color-accent-glow);
+    padding: 0.2rem 0.6rem;
+    border-radius: 50px;
+    border: 1px solid rgba(0, 212, 170, 0.3);
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+.project-desc {
+    font-size: 0.825rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: auto;
+}
+
+.project-tags span {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-text-subtle);
+    background: var(--color-bg);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    transition: all var(--transition-fast);
+}
+
+.project-card:hover .project-tags span {
+    color: var(--color-text-muted);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+@media (max-width: 768px) {
+    .project-cards-grid {
+        grid-template-columns: 1fr;
+    }
+    .project-featured-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Featured Projects 4-Column Grid */
+.project-featured-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.project-card-featured {
+    display: flex;
+    flex-direction: column;
+}
+
+.project-card-category {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.project-card-category i {
+    color: var(--color-accent);
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+@media (max-width: 1200px) {
+    .project-featured-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .project-featured-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===============================================
     Experience Section
    =============================================== */
 .experience-section {
