@@ -735,10 +735,10 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-/* Featured Projects 4-Column Grid */
+/* Featured Projects 3-Column Grid */
 .project-featured-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
     margin-bottom: 2.5rem;
 }
@@ -765,7 +765,7 @@ h1, h2, h3, h4, h5, h6 {
     flex-shrink: 0;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 900px) {
     .project-featured-grid {
         grid-template-columns: repeat(2, 1fr);
     }
