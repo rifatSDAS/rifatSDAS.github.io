@@ -7,890 +7,449 @@
     <title>Dr. Kazi Rifat Ahmed | GeoAI & EO Platform Architect</title>
     <meta name="description" content="GeoAI & Earth Observation Platform Architect and Full Stack GeoAI Engineer specializing in satellite data services, cloud-native architecture, and Earth observation systems." />
     <link rel="icon" type="image/x-icon" href="./logo/icon.png" />
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Bootstrap 5 CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    
-    <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <style>
+        /* ── CSS Variables (matching original theme) ── */
+        :root {
+            --color-bg: #0a0a0f;
+            --color-text: #e8e8ed;
+            --color-text-muted: #8a8a95;
+            --color-accent: #00d4aa;
+            --color-accent-secondary: #7c3aed;
+            --font-display: 'Outfit', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            height: 100%;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-display);
+            overflow: hidden;
+        }
+
+        /* ── Star field ── */
+        .stars {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .star {
+            position: absolute;
+            border-radius: 50%;
+            background: #fff;
+            animation: twinkle var(--dur) ease-in-out infinite alternate;
+            opacity: 0;
+        }
+        @keyframes twinkle {
+            from { opacity: 0;          transform: scale(0.8); }
+            to   { opacity: var(--op);  transform: scale(1.2); }
+        }
+
+        /* ── Grid overlay ── */
+        .grid-overlay {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0,212,170,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,212,170,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Page centre layout ── */
+        .stage {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        /* ── Rocket scene ── */
+        .rocket-scene {
+            position: relative;
+            width: 120px;
+            height: 220px;
+            margin-bottom: 2rem;
+        }
+
+        /* launch pad */
+        .launch-pad {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 8px;
+            background: linear-gradient(90deg, #555565, #888899, #555565);
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(120,120,140,0.4);
+        }
+        .launch-pad::before, .launch-pad::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            width: 4px;
+            height: 24px;
+            background: var(--color-text-muted);
+            border-radius: 2px;
+        }
+        .launch-pad::before { left: 16px; }
+        .launch-pad::after  { right: 16px; }
+
+        /* rocket wrapper — animates upward */
+        .rocket-wrapper {
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: launch 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+        }
+        @keyframes launch {
+            0%   { transform: translateX(-50%) translateY(0)      scale(1);    opacity: 1; }
+            60%  { transform: translateX(-50%) translateY(-155px)  scale(0.9);  opacity: 1; }
+            85%  { transform: translateX(-50%) translateY(-200px)  scale(0.75); opacity: 0; }
+            86%  { transform: translateX(-50%) translateY(0)      scale(1);    opacity: 0; }
+            100% { transform: translateX(-50%) translateY(0)      scale(1);    opacity: 1; }
+        }
+
+        /* SVG rocket */
+        .rocket-svg {
+            width: 56px;
+            filter: drop-shadow(0 0 8px rgba(0,212,170,0.6));
+        }
+
+        /* exhaust flame */
+        .flame {
+            position: absolute;
+            bottom: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            animation: flicker 0.15s ease-in-out infinite alternate;
+        }
+        @keyframes flicker {
+            from { transform: translateX(-50%) scaleY(1)   scaleX(1); }
+            to   { transform: translateX(-50%) scaleY(1.3) scaleX(0.85); }
+        }
+
+        /* particles / smoke puffs */
+        .particles {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 40px;
+            pointer-events: none;
+        }
+        .puff {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(251,146,60,0.6);
+            animation: puff var(--pd) ease-out infinite;
+            animation-delay: var(--delay);
+            bottom: 0;
+            left: 50%;
+        }
+        @keyframes puff {
+            0%   { transform: translate(-50%, 0)  scale(0.2); opacity: 0.8; }
+            100% { transform: translate(var(--tx), -30px) scale(1.8); opacity: 0; }
+        }
+
+        /* ── Text content ── */
+        .visit-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .visit-heading {
+            font-size: clamp(1.25rem, 4vw, 2rem);
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .visit-sub {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            margin-bottom: 2rem;
+            max-width: 360px;
+        }
+
+        .visit-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.85rem 2rem;
+            background: transparent;
+            border: 1px solid var(--color-accent);
+            color: var(--color-accent);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            text-decoration: none;
+            border-radius: 4px;
+            letter-spacing: 0.05em;
+            transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+            position: relative;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .visit-link::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--color-accent);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: -1;
+        }
+        .visit-link:hover::before { transform: translateX(0); }
+        .visit-link:hover {
+            color: var(--color-bg);
+            box-shadow: 0 0 24px rgba(0,212,170,0.4);
+        }
+        .visit-link .arrow {
+            transition: transform 0.25s;
+        }
+        .visit-link:hover .arrow { transform: translateX(4px); }
+
+        /* ── Gradient accent line ── */
+        .accent-line {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, #00ff87, #00d4aa, #00a86b);
+            border-radius: 2px;
+            margin: 1.5rem auto 0;
+        }
+
+        /* ── Satellite flyby ── */
+        .satellite {
+            position: fixed;
+            top: 8%;
+            left: 0;
+            z-index: 2;
+            pointer-events: none;
+            animation: flyby 12s linear infinite;
+            filter: drop-shadow(0 0 6px rgba(245,200,66,0.5));
+        }
+        @keyframes flyby {
+            0%   { transform: translateX(-120px) rotate(-8deg); opacity: 0; }
+            5%   { opacity: 1; }
+            95%  { opacity: 1; }
+            100% { transform: translateX(calc(100vw + 120px)) rotate(-8deg); opacity: 0; }
+        }
+        /* signal pulse emanating from dish */
+        .satellite-signal {
+            position: absolute;
+            top: 4px;
+            left: -6px;
+            width: 18px;
+            height: 18px;
+            border: 1.5px solid #f5c842;
+            border-radius: 50%;
+            opacity: 0;
+            animation: signal 2s ease-out infinite;
+        }
+        .satellite-signal:nth-child(2) { animation-delay: 0.6s; }
+        .satellite-signal:nth-child(3) { animation-delay: 1.2s; }
+        @keyframes signal {
+            0%   { transform: scale(0.3); opacity: 0.8; }
+            100% { transform: scale(2);   opacity: 0; }
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#home">
-                <span class="brand-icon">◈</span> Dr. Kazi Rifat Ahmed
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#awards">Awards</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#education">Education</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-                </ul>
+
+    <!-- Star field (generated by JS) -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Grid overlay -->
+    <div class="grid-overlay"></div>
+
+    <!-- Satellite flyby -->
+    <div class="satellite" style="width:90px;">
+        <!-- Signal rings -->
+        <div class="satellite-signal"></div>
+        <div class="satellite-signal"></div>
+        <div class="satellite-signal"></div>
+        <svg viewBox="0 0 90 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="satBody" x1="0" y1="0" x2="90" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%"  stop-color="#7a5c1a"/>
+                    <stop offset="50%" stop-color="#c8942a"/>
+                    <stop offset="100%" stop-color="#7a5c1a"/>
+                </linearGradient>
+                <linearGradient id="panelL" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+                    <stop offset="0%"  stop-color="#f5c842" stop-opacity="0.95"/>
+                    <stop offset="100%" stop-color="#c87d12" stop-opacity="0.85"/>
+                </linearGradient>
+                <linearGradient id="panelR" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+                    <stop offset="0%"  stop-color="#c87d12" stop-opacity="0.85"/>
+                    <stop offset="100%" stop-color="#f5c842" stop-opacity="0.95"/>
+                </linearGradient>
+            </defs>
+
+            <!-- Left solar panel -->
+            <rect x="0" y="13" width="26" height="14" rx="1.5" fill="url(#panelL)" stroke="rgba(245,200,66,0.6)" stroke-width="0.5"/>
+            <!-- Panel grid lines -->
+            <line x1="8"  y1="13" x2="8"  y2="27" stroke="rgba(0,0,0,0.3)" stroke-width="0.5"/>
+            <line x1="16" y1="13" x2="16" y2="27" stroke="rgba(0,0,0,0.3)" stroke-width="0.5"/>
+            <line x1="0"  y1="20" x2="26" y2="20" stroke="rgba(0,0,0,0.3)" stroke-width="0.5"/>
+
+            <!-- Left arm -->  
+            <rect x="26" y="19" width="8" height="2" rx="1" fill="#b8902a"/>
+
+            <!-- Body -->
+            <rect x="34" y="10" width="22" height="20" rx="3" fill="url(#satBody)" stroke="rgba(245,200,66,0.5)" stroke-width="0.75"/>
+            <!-- Body detail stripe -->
+            <rect x="34" y="18" width="22" height="4" rx="0" fill="rgba(245,200,66,0.12)"/>
+            <!-- Antenna dish -->
+            <ellipse cx="40" cy="10" rx="5" ry="3" fill="none" stroke="#f5c842" stroke-width="1"/>
+            <line x1="40" y1="10" x2="40" y2="13" stroke="#f5c842" stroke-width="0.75"/>
+            <!-- Status light -->
+            <circle cx="51" cy="14" r="1.5" fill="#f5c842" opacity="0.9"/>
+
+            <!-- Right arm -->
+            <rect x="56" y="19" width="8" height="2" rx="1" fill="#b8902a"/>
+
+            <!-- Right solar panel -->
+            <rect x="64" y="13" width="26" height="14" rx="1.5" fill="url(#panelR)" stroke="rgba(245,200,66,0.6)" stroke-width="0.5"/>
+            <!-- Panel grid lines -->
+            <line x1="72" y1="13" x2="72" y2="27" stroke="rgba(0,0,0,0.3)" stroke-width="0.5"/>
+            <line x1="80" y1="13" x2="80" y2="27" stroke="rgba(0,0,0,0.3)" stroke-width="0.5"/>
+            <line x1="64" y1="20" x2="90" y2="20" stroke="rgba(0,0,0,0.3)" stroke-width="0.5"/>
+        </svg>
+    </div>
+
+    <!-- Main stage -->
+    <main class="stage">
+
+        <!-- Rocket animation -->
+        <div class="rocket-scene">
+
+            <!-- Smoke puffs on the pad -->
+            <div class="particles">
+                <div class="puff" style="--pd:1.4s;--delay:0s;  --tx:-14px; width:14px;height:14px;"></div>
+                <div class="puff" style="--pd:1.6s;--delay:0.3s;--tx: 10px; width:10px;height:10px;"></div>
+                <div class="puff" style="--pd:1.2s;--delay:0.6s;--tx: -6px; width:12px;height:12px;"></div>
+                <div class="puff" style="--pd:1.8s;--delay:0.1s;--tx:  16px; width:8px; height:8px;"></div>
             </div>
+
+            <!-- Rocket body -->
+            <div class="rocket-wrapper">
+
+                <!-- Exhaust flame -->
+                <svg class="flame" viewBox="0 0 20 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="flameGrad" x1="10" y1="0" x2="10" y2="30" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%"   stop-color="#00d4aa" stop-opacity="1"/>
+                            <stop offset="50%"  stop-color="#f59e0b" stop-opacity="0.9"/>
+                            <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M10 0 C6 8 2 14 4 22 C6 28 10 30 10 30 C10 30 14 28 16 22 C18 14 14 8 10 0Z" fill="url(#flameGrad)"/>
+                </svg>
+
+                <!-- Rocket SVG -->
+                <svg class="rocket-svg" viewBox="0 0 56 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="bodyGrad" x1="0" y1="0" x2="56" y2="0" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%"   stop-color="#c8c8d0"/>
+                            <stop offset="50%"  stop-color="#f0f0f5"/>
+                            <stop offset="100%" stop-color="#c8c8d0"/>
+                        </linearGradient>
+                        <linearGradient id="noseGrad" x1="28" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%"   stop-color="#ffffff"/>
+                            <stop offset="100%" stop-color="#d0d0dc"/>
+                        </linearGradient>
+                        <linearGradient id="finGrad" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%"   stop-color="#e0e0ea" stop-opacity="0.85"/>
+                            <stop offset="100%" stop-color="#a0a0b8" stop-opacity="0.95"/>
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Left fin -->
+                    <path d="M18 68 L8 82 L18 76 Z" fill="url(#finGrad)"/>
+                    <!-- Right fin -->
+                    <path d="M38 68 L48 82 L38 76 Z" fill="url(#finGrad)"/>
+
+                    <!-- Body -->
+                    <rect x="18" y="28" width="20" height="50" rx="2" fill="url(#bodyGrad)" stroke="rgba(220,220,235,0.5)" stroke-width="0.5"/>
+
+                    <!-- Nose cone -->
+                    <path d="M28 0 C22 8 18 18 18 28 L38 28 C38 18 34 8 28 0Z" fill="url(#noseGrad)"/>
+
+                    <!-- Window -->
+                    <circle cx="28" cy="46" r="6" fill="#1a1a2e" stroke="rgba(255,255,255,0.8)" stroke-width="1.5"/>
+                    <circle cx="28" cy="46" r="3" fill="rgba(200,220,255,0.35)"/>
+
+                    <!-- Accent stripe -->
+                    <rect x="18" y="60" width="20" height="2" rx="1" fill="rgba(255,255,255,0.6)"/>
+
+                    <!-- Nozzle -->
+                    <path d="M22 78 L24 84 L32 84 L34 78 Z" fill="#888899" stroke="rgba(255,255,255,0.4)" stroke-width="0.5"/>
+                </svg>
+
+            </div>
+
+            <!-- Launch pad -->
+            <div class="launch-pad"></div>
         </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-bg"></div>
-        <div class="hero-grid"></div>
-        <div class="container hero-content">
-            <div class="hero-badge">GeospatialAI | Earth Observation Platform Architect | Tech Lead</div>
-            <h1 class="hero-title">
-                Transforming<br>
-                <span class="gradient-text">Satellite Data</span><br>
-                into Intelligence
-            </h1>
-            <p class="hero-subtitle">
-                Architecting next-generation GeospatialAI (GeoAI) & Earth Observation (EO) systems and multi-sensor EO drone platforms, 
-                engineering satellite data pipelines, deploying GeoAI and ML/DL systems, and building cloud-native geospatial infrastructure 
-                while exploring quantum computing and blockchain to push the boundaries of what satellite data can deliver.
-            </p>
-            <div class="hero-cta">
-                <a href="#about" class="btn-primary-custom">Explore My Work</a>
-                <a href="#contact" class="btn-secondary-custom">Get in Touch</a>
-            </div>
-            <div class="hero-stats">
-                <div class="stat">
-                    <span class="stat-number">14+</span>
-                    <span class="stat-label">Years Experience</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">2</span>
-                    <span class="stat-label">Tech Startups</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">Ph.D.</span>
-                    <span class="stat-label">Remote Sensing Sci. & Tech.</span>
-                </div>
-            </div>
-        </div>
-        <div class="scroll-indicator">
-            <span>Scroll</span>
-            <div class="scroll-line"></div>
-        </div>
-    </section>
+        <!-- Text -->
+        <p class="visit-label">My website has moved</p>
+        <h1 class="visit-heading">Visit My Website</h1>
 
-    <!-- About Section -->
-    <section class="section about-section" id="about">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">01</span>
-                <h2 class="section-title">About Me</h2>
-            </div>
-            
-            <div class="row g-5 align-items-start">
-                <div class="col-lg-7">
-                    <div class="about-content">
-                        <p class="lead-text">
-                            I'm <strong>Dr. Kazi Rifat Ahmed</strong>, a GeoAI &amp; EO Platform Architect, Full Stack GeoAI Engineer, and Tech Lead 
-                            engineering satellite data pipelines and multi-sensor EO drone platforms, deploying AI/ML-DL systems for geospatial intelligence, 
-                            architecting cloud-native EO infrastructure, and pioneering emerging technologies like quantum computing and blockchain 
-                            to transform Earth observation data into real-world impact at scale.
-                        </p>
-                        
-                        <div class="expertise-grid">
-                            <div class="expertise-item">
-                                <div class="expertise-icon"><i class="fas fa-brain"></i></div>
-                                <div class="expertise-text">
-                                    <h4>AI/ML-DL for Geospatial Data</h4>
-                                    <p>Designing and deploying GeoAI systems from deep learning models for satellite imagery analysis to end-to-end ML 
-                                        pipelines for geospatial intelligence.</p>
-                                </div>
-                            </div>
-                            <div class="expertise-item">
-                                <div class="expertise-icon"><i class="fas fa-robot"></i></div>
-                                <div class="expertise-text">
-                                    <h4>GeoAI Agents & LLM Integration</h4>
-                                    <p>Building domain-specific GeoAI agents and skills powered by LLMs — enabling natural-language interaction with 
-                                        geospatial data, autonomous EO analysis workflows, and AI-assisted coding for remote sensing tasks.</p>
-                                </div>
-                            </div>
-                            <div class="expertise-item">
-                                <div class="expertise-icon"><i class="fas fa-satellite"></i></div>
-                                <div class="expertise-text">
-                                    <h4>Satellite Data Engineering</h4>
-                                    <p>End-to-end EO data engineering for large-scale multi-sensor & multi-mission processing pipelines, analytics, 
-                                        and geospatial visualization at scale.</p>
-                                </div>
-                            </div>
-                            <div class="expertise-item">
-                                <div class="expertise-icon"><i class="fas fa-helicopter"></i></div>
-                                <div class="expertise-text">
-                                    <h4>Multi-Sensor EO Drone Engineering</h4>
-                                    <p>Designing next-generation airborne EO platforms combining X-band SAR, RGB, NIR, thermal, and LiDAR sensors with 
-                                        onboard edge AI enabling affordable, all-weather, 
-                                        very high-resolution Earth observation beyond existing spatio-temporal resolution constraints.</p>
-                                </div>
-                            </div>
-                            <div class="expertise-item">
-                                <div class="expertise-icon"><i class="fas fa-cloud"></i></div>
-                                <div class="expertise-text">
-                                    <h4>Cloud-Native Architecture</h4>
-                                    <p>Architecting scalable, resilient EO platforms using Kubernetes, microservices, and cloud-native DevOps from ground segment to user-facing APIs.</p>
-                                </div>
-                            </div>
-                            <div class="expertise-item">
-                                <div class="expertise-icon"><i class="fas fa-atom"></i></div>
-                                <div class="expertise-text">
-                                    <h4>Emerging Technologies</h4>
-                                    <p>Exploring quantum computing and blockchain for next-generation geospatial data security, provenance, and 
-                                        processing efficiency.</p>
-                                </div>
-                            </div>
-                        </div>
+        <a href="https://kazirifatahmed.com/" target="_blank" rel="noopener noreferrer" class="visit-link">
+            <p>Dr. Kazi Rifat Ahmed</p>
+            <span class="arrow">&rarr;</span>
+        </a>
 
-                    </div>
-                </div>
-                
-                <div class="col-lg-5">
-                    <div class="about-sidebar">
-                        <div class="tech-stack-card">
-                            <h4><i class="fas fa-code"></i> Tech Stack</h4>
-                            <div class="tech-tags">
-                                <span>Python</span><span>Java</span><span>JavaScript</span><span>TypeScript</span><span>C/C++</span>
-                                <span>Bash</span><span>Docker</span><span>Kubernetes</span><span>DevOps</span>
-                                <span>AI/ML-DL</span><span>MLOps</span><span>GeoAI Agents</span><span>LLM Integration</span>
-                                <span>Edge AI</span><span>Drone Programming</span><span>SAR</span><span>Optical</span><span>LiDAR</span>
-                                <span>GDAL APIs</span><span>Remote Sensing</span><span>Geospatial Data Science</span><span>Blockchain</span>
-                            </div>
-                        </div>
-                        
-                        <div class="research-card">
-                            <h4><i class="fas fa-flask"></i> Research Interests</h4>
-                            <ul class="research-list">
-                                <li>GeoAI & Big Data Analytics</li>
-                                <li>GeoAI Agents, Skills & LLM Integration</li>
-                                <li>Satellite Data Engineering & EO Systems</li>
-                                <li>Multi-Sensor EO Drone Platforms & Edge AI</li>
-                                <li>Cloud-Native EO Platform Architecture</li>
-                                <li>EO Sensors & Space Technology</li>
-                                <li>Advanced Remote Sensing Techniques</li>
-                                <li>Planetary Science & Exploration</li>
-                                <li>Quantum Computing & Blockchain</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="business-card">
-                            <h4><i class="fas fa-chart-line"></i> Business Acumen</h4>
-                            <p>
-                                Co-founder of two tech startups and actively seeking investment to bring advanced geospatial and EO products to market.
-                                Bridging cutting-edge space technology with commercial opportunities in the rapidly growing billion-euro geospatial 
-                                market by filling critical gaps through next-generation satellite data services, GeoAI platforms, and multi-sensor EO 
-                                drone hardware ventures.Expertise in transforming complex EO pipelines into scalable SaaS/PaaS/DaaS offerings 
-                                delivering measurable ROI across climate adaptation, agriculture, disaster management, and carbon markets.
-                                Available for geospatial & EO consultancy and hardware/software collaboration.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="accent-line"></div>
+    </main>
 
-            <!-- Products & Services -->
-            <div class="projects-showcase" id="products-services">
-                <div class="projects-header">
-                    <h3>Products & Services</h3>
-                    <div class="investment-badge">
-                        <i class="fas fa-globe"></i>
-                        Addressing the Billion-Euro Satellite Data Services Market
-                    </div>
-                </div>
-
-                <div class="product-services-grid">
-
-                    <!-- Card 1: Sensor Aktor — Web GIS & RS Platform -->
-                    <div class="product-card">
-                        <div class="product-card-top">
-                            <div class="product-card-icon">
-                                <i class="fas fa-map-location-dot"></i>
-                            </div>
-                            <div class="product-card-meta">
-                                <span class="product-badge">Sensor Aktor GmbH</span>
-                                <a href="https://www.linkedin.com/company/sensor-aktor-gmbh" target="_blank" class="product-ext-link">
-                                    <i class="fas fa-arrow-up-right-from-square"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <p class="product-role"><i class="fas fa-user-tie"></i> Technical Lead | Business Intelligence</p>
-                        <div class="product-type">
-                            <span class="product-type-cat"><i class="fas fa-cube"></i> Cloud-native Software</span>
-                            <span class="product-type-delivery">SaaS · DaaS · PaaS</span>
-                        </div>
-                        <h4 class="product-name">Web GIS & Remote Sensing Platform</h4>
-                        <p class="product-tagline">Multi-mission. Multi-sensor. Cloud-native. API-first.</p>
-                        <p class="product-desc">
-                            A state-of-the-art cloud-native Web GIS and Remote Sensing platform, APIs, and analytics for
-                            satellite data-driven insights, built on Green IT principles with agile and cutting-edge technology.
-                            Enables users to search, download, visualize, monitor, and analyze multi-sensor and multi-mission EO data
-                            (Optical &amp; Radar) at scale without building their own infrastructure.
-                        </p>
-                        <ul class="product-feature-list">
-                            <li>35+ optical indices (vegetation, water & moisture, urban & built-up, and specialized analysis) from 
-                                Sentinel-2, Sentinel-3 OLCI, Landsa 7/8/9, and upcoming missions
-                            </li>
-                            <li>Radar tools for Sentinel-1 SAR (Land & Ocean)</li>
-                            <li>Land & Water products for Sentinel-3 and atmospheric data from Sentinel-5p TROPOMI</li>
-                            <li>Basic Remote Sensing tools including Raster Calculator</li>
-                            <li>Basic GIS tools for vector draw & edit, measurement, GeoJSON import/export & edit</li>
-                            <li>Numerous base maps including Sentinel-2 RGB mosaic</li>
-                            <li>European Land Use/Land Cover maps as base layers</li>
-                            <li>Very high resolution base layers — 2m satellite (Europe), 20cm airborne (Hessen, Germany)</li>
-                            <li>Property boundaries and cadastral information for Hessen, Germany</li>
-                            <li>Location-based current weather information overlay</li>
-                            <li>Air-gapped deployment with ultra-low latency for secure environments</li>
-                            <li>Accessible UI for non-expert users with interactive web maps</li>
-                        </ul>
-                        <div class="product-tags">
-                            <span>Web GIS</span><span>SAR</span><span>Optical</span><span>Cloud-Native</span>
-                            <span>SaaS</span><span>PaaS</span><span>DaaS</span><span>Green IT</span>
-                        </div>
-                    </div>
-
-                    <!-- Card 2: QuantumED — Advanced Earth System Model Platform -->
-                    <div class="product-card">
-                        <div class="product-card-top">
-                            <div class="product-card-icon">
-                                <i class="fas fa-earth-europe"></i>
-                            </div>
-                            <div class="product-card-meta">
-                                <span class="product-badge">QuantumED UG · ESA BIC</span>
-                                <a href="https://www.linkedin.com/company/quantumed-ug" target="_blank" class="product-ext-link">
-                                    <i class="fas fa-arrow-up-right-from-square"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <p class="product-role"><i class="fas fa-user-tie"></i> Founder | Technical Lead | Business Intelligence</p>
-                        <div class="product-type">
-                            <span class="product-type-cat"><i class="fas fa-cube"></i> Cloud-native Software</span>
-                            <span class="product-type-delivery">DaaS · SaaS · PaaS</span>
-                        </div>
-                        <h4 class="product-name">Advanced Earth System Model Platform</h4>
-                        <p class="product-tagline">Turning terabytes of satellite data into actionable intelligence.</p>
-                        <p class="product-desc">
-                            A physics-based, mechanistic advanced Earth System Model (ESM) platform delivering sensor-specific geospatial
-                            intelligence from field scale to global scale, in daily to monthly at 10 m to 300 m resolution
-                            across SaaS, DaaS, and PaaS delivery models. Supporting climate resilience (adaptation & mitigation),
-                            agricultural monitoring, ecosystem management, environmental monitoring, urban planning,
-                            disaster management & response, supporting Sustainable Development Goals (SDGs) achievement and more.
-                        </p>
-                        <ul class="product-feature-list">
-                            <li>Ecosystem Evapotranspiration (EcoET) — flagship ESM for water and energy fluxes</li>
-                            <li>Ecosystem specific drought monitoring with multi-sensor EO data fusion and advanced soil moisture modeling</li>
-                            <li>Above Ground Biomass, Biodiversity Mapping & Crop Health monitoring</li>
-                            <li>Flood modeling & near-real-time disaster response services</li>
-                            <li>Urban Heat Island detection & Surface Water parameter retrieval</li>
-                            <li>Fire Hazard mapping based on multi-sensor EO data and weather conditions</li>
-                            <li>Bathymetry estimation for inland & coastal water bodies</li>
-                            <li>Multi-sensor fusion: Sentinel-1/2/3/5P, Landsat 7/8/9, FLEX-SIF, Biomass, ECMWF, EUMETSAT</li>
-                            <li>Weather forecasting & historical data as base maps</li>
-                            <li>Interactive data visualization tools with 2D & 3D web maps with time-series analysis</li>
-                            <li>ESM calibration & validation data for Sentinel, Landsat & upcoming missions</li>
-                        </ul>
-                        <div class="product-tags">
-                            <span>ESM</span><span>EcoET</span><span>Drought</span><span>Biodiversity</span>
-                            <span>Flood</span><span>Climate</span><span>SaaS</span><span>PaaS</span><span>DaaS</span>
-                            <span>ESA BIC</span>
-                        </div>
-                    </div>
-
-                    <!-- Card 3: spectralGeoAI — End-to-End GeoAI Venture -->
-                    <div class="product-card product-card-highlight">
-                        <div class="product-card-top">
-                            <div class="product-card-icon">
-                                <i class="fas fa-circle-nodes"></i>
-                            </div>
-                            <div class="product-card-meta">
-                                <span class="product-badge">spectralGeoAI</span>
-                                <a href="https://spectralgeoai.com/" target="_blank" class="product-ext-link">
-                                    <i class="fas fa-arrow-up-right-from-square"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <p class="product-role"><i class="fas fa-user-tie"></i> Founder | Technical Lead | Business Intelligence</p>
-                        <div class="product-type">
-                            <span class="product-type-cat"><i class="fas fa-cube"></i> Software & Hardware</span>
-                            <span class="product-type-delivery">AIaaS · SaaS · DaaS · PaaS</span>
-                        </div>
-                        <h4 class="product-name">End-to-End GeoAI & Edge-AI Powered EO Drones</h4>
-                        <p class="product-tagline">From the edge to the cloud, GeoAI delivered as a service.</p>
-                        <p class="product-desc">
-                            spectralGeoAI is an end-to-end GeoAI venture that turns Earth observation into decision-ready intelligence and
-                            delivers it as AI, software, data, and platform services. It spans composable GeoAI skills, autonomous GeoAI agents,
-                            coordinated GeoAI teams, and next-generation multi-sensor EO drones, covering the full path from airborne sensing
-                            to AI-driven geospatial analytics.
-                        </p>
-                        <ul class="product-feature-list">
-                            <li><strong>GeoAI Skills</strong> — Composable, task-specific GeoAI capabilities (query, analysis, optical indices, 
-                                classification, feature extraction) that plug into any EO or geospatial workflow.</li>
-                            <li><strong>GeoAI Agents</strong> — Autonomous agents that understand natural language, orchestrate EO analysis, and 
-                                automate end-to-end geospatial intelligence tasks.</li>
-                            <li><strong>GeoAI Teams</strong> — Coordinated multi-agent systems where specialized agents collaborate to solve complex, 
-                                multi-step geospatial problems at scale.</li>
-                            <li><strong>EO Drones — terraSAT</strong> — Next-generation multi-sensor airborne EO platform with onboard edge AI, 
-                                delivering very-high-resolution, all-weather Earth observation. <em>Architecture and sensor stack proprietary, 
-                                    details available under NDA.</em></li>
-                        </ul>
-                        <div class="product-tags">
-                            <span>GeoAI Skills</span><span>GeoAI Agents</span><span>GeoAI Teams</span><span>EO Drones</span>
-                            <span>Edge AI</span><span>AIaaS</span><span>SaaS</span><span>DaaS</span><span>PaaS</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Projects Showcase -->
-            <div class="projects-showcase">
-                <div class="projects-header">
-                    <h3>Projects & Web Apps I built</h3>
-                </div>
-
-                <!-- Featured Projects — 3 Columns -->
-                <div class="project-featured-grid">
-                    <!-- Column 1: Outdoor Fitness & Adventure -->
-                    <a href="https://www.runbix.com/" target="_blank" class="project-card project-card-featured">
-                        <div class="project-card-category">
-                            <i class="fas fa-person-running"></i>
-                            Outdoor Fitness & Adventure Web App
-                        </div>
-                        <div class="project-card-header">
-                            <span class="project-name">RunBiX</span>
-                            <i class="fas fa-arrow-up-right-from-square"></i>
-                        </div>
-                        <p class="project-desc">AI-driven decision-support platform generating go/no-go confidence scores for road running, trail 
-                            running, road biking, and mountain biking by analyzing location-based weather forecasts with ML. Features natural-language 
-                            route creation, interactive editing, GPX/KML export for Garmin, interactive web maps, and an LLM chatbot.</p>
-                        <div class="project-tags">
-                            <span>ML</span><span>LLM</span><span>Web Maps</span><span>GPX/KML</span><span>Weather AI</span>
-                        </div>
-                    </a>
-
-                    <!-- Column 3: Crypto Predictor/Forecaster -->
-                    <a href="https://crypto4see.com/" target="_blank" class="project-card project-card-featured">
-                        <div class="project-card-category">
-                            <i class="fas fa-chart-line"></i>
-                            Crypto Predictor / Forecaster
-                        </div>
-                        <div class="project-card-header">
-                            <span class="project-name">Crypto4See</span>
-                            <i class="fas fa-arrow-up-right-from-square"></i>
-                        </div>
-                        <p class="project-desc">ML/DL-powered web app forecasting Bitcoin, Ethereum, and XRP prices across daily to weekly horizons 
-                            by fusing historical market data, social media sentiment, and trading volumes. Includes an interactive dashboard and an 
-                            integrated LLM chatbot (Llama 3.2 via Ollama) for conversational analysis of blockchain trends.</p>
-                        <div class="project-tags">
-                            <span>ML/DL</span><span>LLM</span><span>Crypto</span><span>Sentiment</span><span>Dashboard</span>
-                        </div>
-                    </a>
-
-                    <!-- Column 4: Blockchain & Transparent Food Supply Chain -->
-                    <a href="https://github.com/rifatSDAS/SOMO" target="_blank" class="project-card project-card-featured">
-                        <div class="project-card-category">
-                            <i class="fas fa-link"></i>
-                            Blockchain & Transparent Food Supply Chain
-                        </div>
-                        <div class="project-card-header">
-                            <span class="project-name">SOMO</span>
-                            <span class="project-badge">AWS Prize Winner</span>
-                            <i class="fas fa-arrow-up-right-from-square"></i>
-                        </div>
-                        <p class="project-desc">Blockchain-based food traceability service supporting local farmers with direct-to-customer sales, 
-                            food ordering &amp; delivery, live tracking, crypto payments, food security &amp; quality certification, farmer-customer 
-                            networking, and an interactive web dashboard with regional farm details and web map. Developed at Swiss Blockchain 
-                            Hackathon 2019.</p>
-                        <div class="project-tags">
-                            <span>Blockchain</span><span>Hyperledger</span><span>AWS</span><span>Web Map</span><span>Crypto</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Open Source Geospatial & GeoAI -->
-                <div class="project-category project-category-opensource">
-                    <h4 class="project-category-title">
-                        <i class="fas fa-globe"></i>
-                        Open Source Geospatial & GeoAI Web Apps / Projects
-                    </h4>
-                    <div class="project-cards-grid">
-                        <a href="https://weatherx-geo.vercel.app/" target="_blank" class="project-card">
-                            <div class="project-card-header">
-                                <span class="project-name">WeatherX-Geo</span>
-                                <i class="fas fa-arrow-up-right-from-square"></i>
-                            </div>
-                            <p class="project-desc">Real-time weather and astronomical data app showing 5-day forecasts, full sun ephemeris 
-                                (sunrise/sunset, golden hour, solar noon, day length), moon ephemeris (phase, illumination, moonrise/moonset), 
-                                illustrated moon phases, and interactive web maps with sun/moon positions and daylight terminator line.</p>
-                            <div class="project-tags">
-                                <span>Weather Forecast</span><span>Weather Maps</span><span>Astronomy</span><span>Real-Time Sun & Moon Tracker</span><span>Daylight Zone</span><span>Real-Time Terminator</span><span>Web Maps</span>
-                            </div>
-                        </a>
-                        <a href="https://huggingface.co/spaces/rifatSDAS/geospatial-ai-query" target="_blank" class="project-card">
-                            <div class="project-card-header">
-                                <span class="project-name">Geospatial AI Query</span>
-                                <i class="fas fa-arrow-up-right-from-square"></i>
-                            </div>
-                            <p class="project-desc">Query geospatial data with natural language and visualize on map and chart with custom styles — 
-                                replacing complex traditional GIS software for data query and visualization. Easily download results without handling 
-                                multiple complex software.</p>
-                            <div class="project-tags">
-                                <span>NLP</span><span>GeoAI</span><span>Web Maps</span><span>Charts</span><span>Data Visualization</span><span>Geographic Data</span>
-                            </div>
-                        </a>
-                        <a href="https://huggingface.co/spaces/rifatSDAS/geoai-coding-agent" target="_blank" class="project-card">
-                            <div class="project-card-header">
-                                <span class="project-name">GeoAI Coding Agent</span>
-                                <i class="fas fa-arrow-up-right-from-square"></i>
-                            </div>
-                            <p class="project-desc">Specially trained LLMs for coding geospatial tasks with detailed explanations and downloadable 
-                                code files (Python, Java, C/C++, Rust, JavaScript). Architecture based on the GeoAI-Assistance-Ext project.</p>
-                            <div class="project-tags">
-                                <span>LLM</span><span>Code Gen</span><span>GeoAI</span><span>Multi-lang</span><span>Python</span><span>Java</span><span>C/C++</span><span>JavaScript</span><span>TypeScript</span><span>Rust</span>
-                            </div>
-                        </a>
-                        <a href="https://github.com/rifatSDAS/GeoAI-Assistance-Ext" target="_blank" class="project-card">
-                            <div class="project-card-header">
-                                <span class="project-name">GeoAI Assistance Extension</span>
-                                <i class="fas fa-arrow-up-right-from-square"></i>
-                            </div>
-                            <p class="project-desc">A VS Code extension for local GeoAI assistance on any geospatial task with an integrated chat 
-                                interface powered by DeepSeek-R1 via Ollama.</p>
-                            <div class="project-tags">
-                                <span>VS Code</span><span>DeepSeek-R1</span><span>Ollama</span><span>GeoAI</span><span>GIS</span><span>Remote Sensing</span>
-                            </div>
-                        </a>
-                        <a href="https://github.com/rifatSDAS/satellite_machine_learning" target="_blank" class="project-card">
-                            <div class="project-card-header">
-                                <span class="project-name">Satellite Machine Learning</span>
-                                <i class="fas fa-arrow-up-right-from-square"></i>
-                            </div>
-                            <p class="project-desc">Combination of unsupervised and supervised machine learning algorithms for satellite image 
-                                classification to produce precise location-based landuse/landcover maps. Useful for the wider GeoAI community.</p>
-                            <div class="project-tags">
-                                <span>ML</span><span>Satellite</span><span>Classification</span><span>LULC</span>
-                            </div>
-                        </a>
-                        <a href="https://github.com/rifatSDAS/satellite_optical_indices" target="_blank" class="project-card">
-                            <div class="project-card-header">
-                                <span class="project-name">Satellite Optical Indices</span>
-                                <i class="fas fa-arrow-up-right-from-square"></i>
-                            </div>
-                            <p class="project-desc">Jupyter notebooks for calculating widely used optical indices from satellite images — for 
-                                studying earth surface features and their spatio-temporal changes.</p>
-                            <div class="project-tags">
-                                <span>Jupyter</span><span>Optical Indices</span><span>Remote Sensing</span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section class="section experience-section" id="experience">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">02</span>
-                <h2 class="section-title">Experience</h2>
-            </div>
-            
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <div class="timeline-date">Jan 2025 — Present</div>
-                        </div>
-                        <h3>CTO - Technical Director & Co-Founder</h3>
-                        <p class="company-name">QuantumED UG, Darmstadt, Germany</p>
-                        <ul class="timeline-list">
-                            <li>Developing state-of-the-art Earth System Models as Satellite Data Services using cutting-edge geospatial tools 
-                                and AI technologies</li>
-                            <li>Architecting cloud-native solutions with GeoServer, GDAL, Kubernetes, Quarkus, and Keycloak</li>
-                            <li>Full-stack development: Java, Python (backend) and JavaScript, TypeScript, HTML/CSS</li>
-                            <li>Implementing AI-{ML/DL} pipelines for geospatial data processing at scale</li>
-                            <li>Delivering SaaS, PaaS, and DaaS solutions</li>
-                            <li>Leading business intelligence and project management initiatives</li>
-                            <li>Technical documentation, R&D leadership, and strategic planning</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <div class="timeline-date">Jan 2022 — Present</div>
-                        </div>
-                        <h3>CTO - Technical Director & Co-Lead</h3>
-                        <p class="company-name">Sensor Aktor GmbH, Darmstadt, Germany</p>
-                        <ul class="timeline-list">
-                            <li>Building cloud-native Web GIS and Remote Sensing platform for satellite data access, analysis, and visualization</li>
-                            <li>Architecting cloud-native solutions with GeoServer, GDAL, Kubernetes, Quarkus, and Keycloak</li>
-                            <li>Full-stack development: Java, Python (backend) and JavaScript, TypeScript, HTML/CSS</li>
-                            <li>Implementing AI-{ML/DL} pipelines for geospatial data processing at scale</li>
-                            <li>Delivering SaaS, PaaS, and DaaS solutions</li>
-                            <li>Leading business intelligence and project management initiatives</li>
-                            <li>Technical documentation, R&D leadership, and strategic planning</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <div class="timeline-date">Jan 2018 — Dec 2021</div>
-                        </div>
-                        <h3>Doctorate (Ph.D.) Researcher</h3>
-                        <p class="company-name">Remote Sensing Laboratory, University of Zurich, Switzerland</p>
-                        <ul class="timeline-list">
-                            <li>Developed advanced forward modeling for Earth radiation fluxes and ecosystem transpiration estimation</li>
-                            <li>Pioneered Sun-Induced Chlorophyll Fluorescence applications for crop drought monitoring</li>
-                            <li>Big satellite data modeling using Radiative Transfer Models in Python</li>
-                            <li>Course lecturer and co-supervisor for postgraduate research</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <!-- <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <div class="timeline-date">Oct 2017 — Dec 2017</div>
-                        </div>
-                        <h3>Geospatial Engineer</h3>
-                        <p class="company-name">Spacenus GmbH, Darmstadt, Germany</p>
-                        <ul class="timeline-list">
-                            <li>ESA Integrated Application Programme project contributor</li>
-                            <li>Sentinel-2 data processing and algorithm development for autonomous cloud masking</li>
-                            <li>Automatic composition of cloud-free satellite imagery with road networks</li>
-                        </ul>
-                    </div>
-                </div> -->
-                
-                <!-- <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <div class="timeline-date">Jan 2012 — May 2015</div>
-                        </div>
-                        <h3>Research Assistant</h3>
-                        <p class="company-name">ISEE Bangladesh, Vanderbilt University, USA</p>
-                        <ul class="timeline-list">
-                            <li>USONR & NSF Belmont Forum funded project</li>
-                            <li>Flood modeling using in-situ and space-borne remote sensing data</li>
-                            <li>Land cover classification using optical and radar satellite data</li>
-                            <li>Bathymetry surveys and 3D river modeling</li>
-                        </ul>
-                    </div>
-                </div> -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section class="section skills-section" id="skills">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">03</span>
-                <h2 class="section-title">Skills</h2>
-            </div>
-            
-            <div class="skills-grid">
-                <div class="skills-category">
-                    <h3><i class="fas fa-briefcase"></i> Leadership & Business</h3>
-                    <div class="skills-list">
-                        <div class="skill-item">Entrepreneurship</div>
-                        <div class="skill-item">Technical Leadership</div>
-                        <div class="skill-item">Project Management</div>
-                        <div class="skill-item">Business Modeling</div>
-                        <div class="skill-item">Strategic Decision Making</div>
-                        <div class="skill-item">R&D Management</div>
-                        <div class="skill-item">Team Collaboration</div>
-                        <div class="skill-item">Technical Communication</div>
-                    </div>
-                </div>
-
-                <div class="skills-category">
-                    <h3><i class="fas fa-satellite-dish"></i> Geospatial & Remote Sensing</h3>
-                    <div class="skills-list">
-                        <div class="skill-item">Satellite Data Engineering</div>
-                        <div class="skill-item">Remote Sensing Science & Technology</div>
-                        <div class="skill-item">Multi-sensor Image Analysis</div>
-                        <div class="skill-item">Atmospheric Correction</div>
-                        <div class="skill-item">Earth System & Climate Modeling</div>
-                        <div class="skill-item">Object Detection & Classification</div>
-                        <div class="skill-item">Feature Identification & Extraction</div>
-                    </div>
-                </div>
-                
-                <div class="skills-category">
-                    <h3><i class="fas fa-robot"></i> AI & Machine Learning</h3>
-                    <div class="skills-list">
-                        <div class="skill-item">Supervised Learning</div>
-                        <div class="skill-item">Unsupervised Learning</div>
-                        <div class="skill-item">Semi-supervised Learning</div>
-                        <div class="skill-item">Reinforcement Learning</div>
-                        <div class="skill-item">Scikit-learn & Scikit-image</div>
-                        <div class="skill-item">PyTorch & TensorFlow</div>
-                        <div class="skill-item">Generative AI & LLMs</div>
-                    </div>
-                </div>
-                
-                <div class="skills-category">
-                    <h3><i class="fas fa-code"></i> Development & Engineering</h3>
-                    <div class="skills-list">
-                        <div class="skill-item">Java & Python Backend</div>
-                        <div class="skill-item">JavaScript & TypeScript Frontend</div>
-                        <div class="skill-item">GDAL/OGR, Rasterio, GeoPandas</div>
-                        <div class="skill-item">Leaflet & Folium Web Mapping</div>
-                        <div class="skill-item">Django & GeoDjango</div>
-                        <div class="skill-item">PostGIS & PostgreSQL</div>
-                        <div class="skill-item">Geospatial Software DevOps</div>
-                    </div>
-                </div>
-                
-                <div class="skills-category">
-                    <h3><i class="fas fa-server"></i> Infrastructure & Cloud</h3>
-                    <div class="skills-list">
-                        <div class="skill-item">Kubernetes Orchestration</div>
-                        <div class="skill-item">Apache Camel & Quarkus</div>
-                        <div class="skill-item">Keycloak IAM</div>
-                        <div class="skill-item">GeoServer</div>
-                        <div class="skill-item">MinIO Object Storage</div>
-                        <div class="skill-item">Git Version Control</div>
-                        <div class="skill-item">Linux DevOps & VMs</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Awards Section -->
-    <section class="section awards-section" id="awards">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">04</span>
-                <h2 class="section-title">Awards & Recognition</h2>
-            </div>
-            
-            <div class="awards-grid row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-                <div class="col">
-                    <div class="award-card h-100">
-                        <div class="award-content">
-                            <div class="award-year">2019</div>
-                            <h3>AWS Prize Winner</h3>
-                            <p class="award-event">Swiss Blockchain Hackathon</p>
-                            <p class="award-description">
-                                Developed SOMO (SOil to MOuth), an innovative blockchain solution for the agriculture 
-                                and food sector using Amazon Managed Blockchain with Hyperledger Fabric.
-                            </p>
-                            <a href="https://hackathon.trustsquare.ch/winner/" target="_blank" class="award-link">
-                                View Winning Pitch <i class="fas fa-external-link-alt"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col">
-                    <div class="award-card h-100">
-                        <div class="award-content">
-                            <div class="award-year">2017</div>
-                            <h3>ImageCLEF Germany Winner</h3>
-                            <p class="award-event">ImageCLEF 2017</p>
-                            <p class="award-description">
-                                Best performing team for population density estimation using Copernicus Sentinel-2 
-                                data and machine learning algorithms.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col">
-                    <div class="award-card h-100">
-                        <div class="award-content">
-                            <div class="award-year">2018</div>
-                            <h3>Best Poster Award</h3>
-                            <p class="award-event">ESA Land Remote Sensing Course</p>
-                            <p class="award-description">
-                                Awarded at the 8th Advanced Training Course on Land Remote Sensing, 
-                                University of Leicester, organized by ESA.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col">
-                    <div class="award-card h-100">
-                        <div class="award-content">
-                            <div class="award-year">2014-2016</div>
-                            <h3>DAAD Scholarship</h3>
-                            <p class="award-event">German Academic Exchange Service</p>
-                            <p class="award-description">
-                                Fully funded academic scholarship for M.Sc. at TU Darmstadt, including 
-                                thesis funding for geoscience research.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Education Section -->
-    <section class="section education-section" id="education">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">05</span>
-                <h2 class="section-title">Education</h2>
-            </div>
-            
-            <div class="education-grid">
-                <div class="education-card">
-                    <div class="education-year">2024</div>
-                    <div class="education-content">
-                        <div class="degree">Doctor of Philosophy (Dr.sc.nat)</div>
-                        <div class="institution">University of Zurich, Switzerland</div>
-                        <div class="field">Remote Sensing of Water Systems</div>
-                        <p class="thesis">
-                            <strong>Thesis:</strong> Remote Sensing of Sun-Induced Chlorophyll Fluorescence 
-                            for Advanced Ecosystem Evapotranspiration Estimates
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="education-card">
-                    <div class="education-year">2016</div>
-                    <div class="education-content">
-                        <div class="degree">Master of Science</div>
-                        <div class="institution">Technische Universität Darmstadt, Germany</div>
-                        <div class="field">Tropical Hydrogeology & Environmental Engineering</div>
-                        <p class="achievement">Top 5% of class • Major in Remote Sensing & Geoinformatics</p>
-                    </div>
-                </div>
-                
-                <div class="education-card">
-                    <div class="education-year">2014</div>
-                    <div class="education-content">
-                        <div class="degree">Master of Science</div>
-                        <div class="institution">Khulna University, Bangladesh</div>
-                        <div class="field">Environmental Science</div>
-                        <p class="achievement">Ranked 2nd • Major in Remote Sensing & Geomorphology</p>
-                    </div>
-                </div>
-                
-                <div class="education-card">
-                    <div class="education-year">2011</div>
-                    <div class="education-content">
-                        <div class="degree">Bachelor of Science</div>
-                        <div class="institution">Khulna University, Bangladesh</div>
-                        <div class="field">Environmental Science</div>
-                        <p class="achievement">Major in Geoinformatics, Remote Sensing & Hydrogeology</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="section contact-section" id="contact">
-        <div class="container">
-            <div class="section-header light">
-                <span class="section-tag">06</span>
-                <h2 class="section-title">Let's Connect</h2>
-            </div>
-            
-            <div class="contact-content">
-                <p class="contact-subtitle">
-                    Interested in satellite data services?
-                </p>
-                
-                <div class="social-links">
-                    <a href="https://github.com/rifatSDAS" target="_blank" class="social-link" aria-label="GitHub">
-                        <i class="fab fa-github"></i>
-                        <span>GitHub</span>
-                    </a>
-                    <a href="https://www.linkedin.com/in/kazi-rifat-ahmed-64304a10b/" target="_blank" class="social-link" aria-label="LinkedIn">
-                        <i class="fab fa-linkedin-in"></i>
-                        <span>LinkedIn</span>
-                    </a>
-                    <a href="https://www.researchgate.net/profile/Kazi-Rifat-Ahmed" target="_blank" class="social-link" aria-label="ResearchGate">
-                        <i class="fab fa-researchgate"></i>
-                        <span>ResearchGate</span>
-                    </a>
-                </div>
-                
-                <div class="ventures-cta">
-                    <p>Explore my ventures:</p>
-                    <div class="venture-links">
-                        <a href="https://www.linkedin.com/company/sensor-aktor-gmbh" target="_blank">Sensor Aktor →</a>
-                        <a href="https://www.linkedin.com/company/quantumed-ug" target="_blank">QuantumED →</a>
-                        <a href="https://spectralgeoai.com/" target="_blank">spectralGeoAI →</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <p>© <span id="footer-year"></span> Dr. Kazi Rifat Ahmed. All Rights Reserved.</p>
-                <p class="footer-tagline">Transforming satellite data into actionable intelligence.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Bootstrap 5 JS CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    
     <script>
-        // Dynamic footer year
-        document.getElementById('footer-year').textContent = new Date().getFullYear();
-
-        // Navbar scroll effect
-        window.addEventListener('scroll', function() {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
-        // Smooth reveal animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('revealed');
-                }
+        // Generate randomised star field
+        const container = document.getElementById('stars');
+        for (let i = 0; i < 160; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            const size = Math.random() * 2.5 + 0.5;
+            const op   = (Math.random() * 0.5 + 0.2).toFixed(2);
+            const dur  = (Math.random() * 4 + 2).toFixed(1) + 's';
+            Object.assign(s.style, {
+                width:             size + 'px',
+                height:            size + 'px',
+                top:               (Math.random() * 100) + '%',
+                left:              (Math.random() * 100) + '%',
+                '--op':            op,
+                '--dur':           dur,
+                animationDelay:    (Math.random() * 5).toFixed(1) + 's'
             });
-        }, observerOptions);
-
-        document.querySelectorAll('.timeline-item, .award-card, .education-card, .skills-category, .project-card').forEach(el => {
-            observer.observe(el);
-        });
+            container.appendChild(s);
+        }
     </script>
-</body>
 
+</body>
 </html>
